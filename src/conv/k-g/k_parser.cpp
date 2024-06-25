@@ -41,7 +41,8 @@ enum class KState {
     Element_Solid,
     Part,
     Part_Adaptive_Failure,
-    Section_Shell
+    Section_Shell,
+    Section_Solid
 };
 
 
@@ -255,6 +256,18 @@ bool parse_k
 				else
 				    sectionLinesRead = 1;
 			    }
+			    else if (command[1] == "SOLID") {
+				state        = KState::Section_Solid;
+				sectionTitle = "";
+				sectionId    = -1;
+
+				if (command.size() == 3) {
+				    if (command[2] == "TITLE")
+					sectionLinesRead = 0;
+				    else
+					std::cout << "Unexpected command " << tokens[0] << " in k-file " << fileName << "\n";
+				}
+			    }
 			    else
 				std::cout << "Unexpected command " << tokens[0] << " in k-file " << fileName << "\n";
 			}
@@ -419,6 +432,42 @@ bool parse_k
 			    data.sections[sectionId].thickness4 = stod(tokens[3]);
 
 			    break;
+			}
+
+			default:
+			    std::cout << "Unexpected SECTION length in k-file " << fileName << "\n";
+			}
+
+			++sectionLinesRead;
+			break;
+		    }
+		    case KState::Section_Solid: {
+			switch (sectionLinesRead) {
+			case 0:
+			    sectionTitle = line;
+			    break;
+
+			case 1: {
+			    if (tokens.size() == 0) {
+				std::cout << "Too short SECTION in k-file " << fileName << "\n";
+				break;
+			    }
+
+			    sectionId = stoi(tokens[0]);
+			    data.sections[sectionId].title = sectionTitle;
+			    break;
+			}
+
+			case 2: {
+			    if (sectionId < 0) {
+				std::cout << "Bad SECTION in k-file " << fileName << "\n";
+				break;
+			    }
+
+			    if (tokens.size() < 3) {
+				std::cout << "Too short SECTION in k-file " << fileName << "\n";
+				break;
+			    }
 			}
 
 			default:
