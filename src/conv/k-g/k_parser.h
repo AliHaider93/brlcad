@@ -45,6 +45,12 @@ struct KElement {
     int node2;
     int node3;
     int node4;
+    int node5;
+    int node6;
+    int node7;
+    int node8;
+    int node9;
+    int node10;
 };
 
 

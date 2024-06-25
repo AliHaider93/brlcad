@@ -3,6 +3,7 @@ set(k-g_SRCF
   k-g.cpp
   k_parser.cpp
   region_list.cpp
+  solid.cpp
   )
 BRLCAD_ADDEXEC(k-g "${k-g_SRCF}" "libwdb;librt;libbu" FOLDER Conv)
 
@@ -11,6 +12,7 @@ set(k-g_ignore_files
   CMakeLists.txt
   k_parser.h
   region_list.h
+  solid.h
   )
 CMAKEFILES(${k-g_ignore_files})
 

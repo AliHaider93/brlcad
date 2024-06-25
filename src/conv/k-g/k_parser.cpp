@@ -38,6 +38,7 @@ enum class KState {
     Include,
     Node,
     Element_Shell,
+    Element_Solid,
     Part,
     Part_Adaptive_Failure,
     Section_Shell
@@ -221,6 +222,9 @@ bool parse_k
 			else if (command[0] == "ELEMENT") {
 			    if ((command.size() == 2) && (command[1] == "SHELL"))
 				state = KState::Element_Shell;
+			    else if ((command.size() == 2) && (command[1] == "SOLID")) {
+				state = KState::Element_Solid;
+			    }
 			    else
 				std::cout << "Unexpected command " << tokens[0] << " in k-file " << fileName << "\n";
 			}
@@ -310,6 +314,36 @@ bool parse_k
 			element.node2 = stoi(tokens[3]);
 			element.node3 = stoi(tokens[4]);
 			element.node4 = stoi(tokens[5]);
+
+			data.elements[eid] = element;
+
+			int pid = stoi(tokens[1]);
+			data.parts[pid].elements.insert(eid);
+			break;
+		    }
+
+		    case KState::Element_Solid: {
+			if (tokens.size() < 10) {
+			    std::cout << "Too short ELEMENT_SOLID in k-file " << fileName << "\n";
+			    break;
+			}
+
+			int eid = stoi(tokens[0]);
+
+			if (data.elements.find(eid) != data.elements.end()) {
+			    std::cout << "Duplicated ELEMENT ID" << eid << "in k-file " << fileName << "\n";
+			}
+
+			KElement element;
+
+			element.node1 = stoi(tokens[2]);
+			element.node2 = stoi(tokens[3]);
+			element.node3 = stoi(tokens[4]);
+			element.node4 = stoi(tokens[5]);
+			element.node5 = stoi(tokens[6]);
+			element.node6 = stoi(tokens[7]);
+			element.node7 = stoi(tokens[8]);
+			element.node8 = stoi(tokens[9]);
 
 			data.elements[eid] = element;
 
