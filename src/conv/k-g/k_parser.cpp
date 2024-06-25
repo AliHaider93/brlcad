@@ -458,20 +458,9 @@ bool parse_k
 			    break;
 			}
 
-			case 2: {
-			    if (sectionId < 0) {
-				std::cout << "Bad SECTION in k-file " << fileName << "\n";
-				break;
-			    }
-
-			    if (tokens.size() < 3) {
-				std::cout << "Too short SECTION in k-file " << fileName << "\n";
-				break;
-			    }
-			}
-
 			default:
 			    std::cout << "Unexpected SECTION length in k-file " << fileName << "\n";
+
 			}
 
 			++sectionLinesRead;
